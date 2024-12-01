@@ -1,0 +1,19 @@
+id = "ziggy"
+name = "Ziggy"
+version = "0.0.1"
+schema_version = 1
+authors = ["Louis Vignoli <louis.vignoli@gmail.com>"]
+description = "Ziggy and ziggy schema support for Zed"
+repository = "https://github.com/lvignoli/zed-ziggy"
+
+[grammars.ziggy]
+repository = "https://github.com/lvignoli/tree-sitter-ziggy"
+commit = "be2743080c59eea94346d63a1ebeeffa64c0fcee"
+
+[grammars.ziggy_schema]
+repository = "https://github.com/lvignoli/tree-sitter-ziggy-schema"
+commit = "b621d01da1d1582e6d77a9761fc64e493fecd7bb"
+
+[language_servers.ziggy]
+name = "Ziggy LSP"
+language = "ziggy"
