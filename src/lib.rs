@@ -8,7 +8,7 @@ struct ZiggyExtension {
 impl ZiggyExtension {
     fn language_server_binary(
         &mut self,
-        language_server_id: &zed::LanguageServerId,
+        _: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<String> {
         if let Some(path) = worktree.which("ziggy") {
@@ -21,67 +21,72 @@ impl ZiggyExtension {
             }
         }
 
-        zed::set_language_server_installation_status(
-            language_server_id,
-            &zed::LanguageServerInstallationStatus::CheckingForUpdate,
-        );
-        let release = zed::latest_github_release(
-            "kristoff-it/ziggy",
-            zed::GithubReleaseOptions {
-                require_assets: true,
-                pre_release: true,
-            },
-        )?;
+        Err(format!("`ziggy` not found in path for current worktree",))
 
-        let (platform, arch) = zed::current_platform();
-        let asset_name = format!(
-            "{arch}-{os}.tar.xz",
-            arch = match arch {
-                zed::Architecture::Aarch64 => "aarch64",
-                zed::Architecture::X86 => return Err("x86 not supported".to_string()),
-                zed::Architecture::X8664 => "x86_64",
-            },
-            os = match platform {
-                zed::Os::Mac => "macos",
-                zed::Os::Linux => "linux-musl",
-                zed::Os::Windows => "windows",
-            },
-        );
+        // TODO(lvignoli): Uncomment when zed-industries/zed#121407 is fixed.
+        // https://github.com/zed-industries/zed/issues/21407
 
-        let asset = release
-            .assets
-            .iter()
-            .find(|asset| asset.name == asset_name)
-            .ok_or_else(|| format!("no asset found matching {:?}", asset_name))?;
+        // zed::set_language_server_installation_status(
+        //     language_server_id,
+        //     &zed::LanguageServerInstallationStatus::CheckingForUpdate,
+        // );
+        // let release = zed::latest_github_release(
+        //     "kristoff-it/ziggy",
+        //     zed::GithubReleaseOptions {
+        //         require_assets: true,
+        //         pre_release: true,
+        //     },
+        // )?;
 
-        let version_dir = format!("ziggy-{}", release.version);
-        let binary_path = format!("{version_dir}/ziggy");
+        // let (platform, arch) = zed::current_platform();
+        // let asset_name = format!(
+        //     "{arch}-{os}.tar.xz",
+        //     arch = match arch {
+        //         zed::Architecture::Aarch64 => "aarch64",
+        //         zed::Architecture::X86 => return Err("x86 not supported".to_string()),
+        //         zed::Architecture::X8664 => "x86_64",
+        //     },
+        //     os = match platform {
+        //         zed::Os::Mac => "macos",
+        //         zed::Os::Linux => "linux-musl",
+        //         zed::Os::Windows => "windows",
+        //     },
+        // );
 
-        if !fs::metadata(&binary_path).map_or(false, |stat| stat.is_file()) {
-            zed::set_language_server_installation_status(
-                language_server_id,
-                &zed::LanguageServerInstallationStatus::Downloading,
-            );
+        // let asset = release
+        //     .assets
+        //     .iter()
+        //     .find(|asset| asset.name == asset_name)
+        //     .ok_or_else(|| format!("no asset found matching {:?}", asset_name))?;
 
-            zed::download_file(
-                &asset.download_url,
-                &version_dir,
-                zed::DownloadedFileType::GzipTar,
-            )
-            .map_err(|e| format!("failed to download file: {e}"))?;
+        // let version_dir = format!("ziggy-{}", release.version);
+        // let binary_path = format!("{version_dir}/ziggy");
 
-            let entries =
-                fs::read_dir(".").map_err(|e| format!("failed to list working directory {e}"))?;
-            for entry in entries {
-                let entry = entry.map_err(|e| format!("failed to load directory entry {e}"))?;
-                if entry.file_name().to_str() != Some(&version_dir) {
-                    fs::remove_dir_all(entry.path()).ok();
-                }
-            }
-        }
+        // if !fs::metadata(&binary_path).map_or(false, |stat| stat.is_file()) {
+        //     zed::set_language_server_installation_status(
+        //         language_server_id,
+        //         &zed::LanguageServerInstallationStatus::Downloading,
+        //     );
 
-        self.cached_binary_path = Some(binary_path.clone());
-        Ok(binary_path)
+        //     zed::download_file(
+        //         &asset.download_url,
+        //         &version_dir,
+        //         zed::DownloadedFileType::GzipTar,
+        //     )
+        //     .map_err(|e| format!("failed to download file: {e}"))?;
+
+        //     let entries =
+        //         fs::read_dir(".").map_err(|e| format!("failed to list working directory {e}"))?;
+        //     for entry in entries {
+        //         let entry = entry.map_err(|e| format!("failed to load directory entry {e}"))?;
+        //         if entry.file_name().to_str() != Some(&version_dir) {
+        //             fs::remove_dir_all(entry.path()).ok();
+        //         }
+        //     }
+        // }
+
+        // self.cached_binary_path = Some(binary_path.clone());
+        // Ok(binary_path)
     }
 }
 
