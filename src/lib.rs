@@ -12,7 +12,7 @@ impl ZiggyExtension {
     ) -> Result<String> {
         worktree
             .which("ziggy")
-            .ok_or("ziggy executable not found in worktree path".to_owned())
+            .ok_or("ziggy executable not found in $PATH".to_owned())
 
         // TODO(lvignoli): Uncomment when zed-industries/zed#121407 is fixed.
         // https://github.com/zed-industries/zed/issues/21407
