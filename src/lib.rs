@@ -1,4 +1,3 @@
-use std::fs;
 use zed_extension_api::{self as zed, Result};
 
 struct ZiggyExtension {
@@ -11,20 +10,22 @@ impl ZiggyExtension {
         _: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<String> {
-        if let Some(path) = worktree.which("ziggy") {
-            return Ok(path);
-        }
-
-        if let Some(path) = &self.cached_binary_path {
-            if fs::metadata(path).map_or(false, |stat| stat.is_file()) {
-                return Ok(path.clone());
-            }
-        }
-
-        Err(format!("`ziggy` not found in path for current worktree",))
+        worktree
+            .which("ziggy")
+            .ok_or("ziggy executable not found in worktree path".to_owned())
 
         // TODO(lvignoli): Uncomment when zed-industries/zed#121407 is fixed.
         // https://github.com/zed-industries/zed/issues/21407
+
+        // if let Some(path) = worktree.which("ziggy") {
+        //     return Ok(path);
+        // }
+
+        // if let Some(path) = &self.cached_binary_path {
+        //     if fs::metadata(path).map_or(false, |stat| stat.is_file()) {
+        //         return Ok(path.clone());
+        //     }
+        // }
 
         // zed::set_language_server_installation_status(
         //     language_server_id,
