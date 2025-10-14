@@ -7,12 +7,14 @@ description = "Ziggy and ziggy schema support for Zed"
 repository = "https://github.com/lvignoli/zed-ziggy"
 
 [grammars.ziggy]
-repository = "https://github.com/lvignoli/tree-sitter-ziggy"
-commit = "be2743080c59eea94346d63a1ebeeffa64c0fcee"
+repository = "https://github.com/kristoff-it/ziggy"
+commit = "eeb21acc0a369dca503167fe963f4f5a7eda2659"
+path = "tree-sitter-ziggy"
 
 [grammars.ziggy_schema]
-repository = "https://github.com/lvignoli/tree-sitter-ziggy-schema"
-commit = "b621d01da1d1582e6d77a9761fc64e493fecd7bb"
+repository = "https://github.com/kristoff-it/ziggy"
+commit = "eeb21acc0a369dca503167fe963f4f5a7eda2659"
+path = "tree-sitter-ziggy-schema"
 
 [language_servers.ziggy]
 name = "Ziggy LSP"
