@@ -4,23 +4,13 @@
 ] @constant.builtin.boolean
 
 (null) @constant.builtin
+(number) @constant.numeric
 
-[
-  (integer)
-  (float)
-] @constant.numeric
-
-
-(tag_string
-    name: (_) @function)
 
 (struct_field
-  key: (_) @keyword)
+  key: (_) @field)
 
-(struct
-  name: (_) @type)
-
-(tag) @function
+(enum) @constant
 
 [
   (string)
@@ -45,5 +35,4 @@
   ")"
 ] @punctuation.bracket
 
-
-(top_comment) @comment
+[ "=" ":" ] @punctuation

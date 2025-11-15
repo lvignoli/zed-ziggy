@@ -1,3 +1,3 @@
 (array "]" @end) @indent
-(map "}" @end) @indent
+(dict "}" @end) @indent
 (struct "}" @end) @indent
